@@ -26,4 +26,5 @@ jobs:
             git pull origin master
             npm install
             npm run build
+            npm run typeorm:migration:run
             pm2 restart back-ts

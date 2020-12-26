@@ -9,7 +9,7 @@
   "autoLoadEntities": true,
   "synchronize": true,
   "migrations": [
-    "dist/src/modules/**/migrations/*{.ts,.js}"
+    "dist/modules/**/migrations/*{.ts,.js}"
   ],
   "cli": {
     "migrationsDir": "migrations"
