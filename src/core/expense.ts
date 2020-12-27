@@ -1,29 +1,30 @@
 import { Money } from './money';
-import { UserId } from './user';
-import { Debt, SplitStrategy } from './split-strategy';
+import { MemberId } from './member';
+import { Debt } from './dept';
+import { SplitStrategy } from './split-strategy/split-strategy.abstract.ts';
 
 export class Expense {
-  private _debtList: Debt[];
+  private _debtsList: Debt[];
 
   constructor(
-    public readonly paidById: UserId,
+    public readonly creditorId: MemberId,
     public readonly money: Money,
     public readonly description: string,
-    public readonly splitBy: UserId[],
+    public readonly debtorsIds: MemberId[],
     public readonly splitStrategy: SplitStrategy,
   ) {
     this._split();
   }
 
-  get debtList(): Debt[] {
-    return this._debtList;
+  get debtsList(): Debt[] {
+    return this._debtsList;
   }
 
   private _split(): void {
-    this._debtList = this.splitStrategy.split(
-      this.paidById,
-      this.splitBy,
+    this._debtsList = this.splitStrategy.split(
+      this.creditorId,
       this.money,
+      this.debtorsIds,
     );
   }
 }
