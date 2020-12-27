@@ -1,7 +1,7 @@
 import { Group } from '../group';
 import { Expense } from '../expense';
 import { Money } from '../money';
-import { EquallySplitStrategy } from '../split-strategy';
+import { EquallySplitStrategy } from '../split-strategy/equally-split-strategy';
 
 const group = new Group('Эроланта', 'Аня');
 
@@ -15,7 +15,7 @@ group
 
 describe('equally-split-strategy', () => {
   it('should split equally', () => {
-    group.expenseList
+    group.expensesList
       .addExpense(
         new Expense(
           'Диана',
@@ -54,18 +54,29 @@ describe('equally-split-strategy', () => {
       );
 
     const usersBalance = group.members.map((member) => ({
-      [member]: group.expenseList
+      [member]: group.expensesList
         .calculateUserBalance(member)
         .amount.toNumber(),
     }));
 
     console.log('Баланс группы', usersBalance);
 
-    const b = group.expenseList
-      .calculateUserBalance('Андрей', 'Руслан')
-      .amount.toNumber();
+    group.members.forEach((member) =>
+      group.members.forEach((mem) => {
+        if (member === mem) {
+          return;
+        }
 
-    console.log(b);
+        console.log(
+          member,
+          mem,
+          group.expensesList
+            .calculateUserBalance(member, mem)
+            .amount.toNumber(),
+        );
+      }),
+    );
+
     expect(0).toEqual(0);
   });
 });
