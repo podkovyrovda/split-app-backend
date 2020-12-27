@@ -1,17 +1,17 @@
-import { UserId } from './user';
-import { ExpenseList } from './expense.list';
+import { MemberId } from './member';
+import { ExpensesList } from './expenses-list';
 
 export class Group {
   constructor(
     public readonly name: string,
-    public readonly ownerId: UserId,
-    public readonly members: UserId[] = [],
-    public readonly expenseList: ExpenseList = new ExpenseList(),
+    public readonly ownerId: MemberId,
+    public readonly members: MemberId[] = [],
+    public readonly expensesList: ExpensesList = new ExpensesList(),
   ) {
     this.addMember(ownerId);
   }
 
-  addMember(userId: UserId): Group {
+  addMember(userId: MemberId): Group {
     this.members.push(userId);
     return this;
   }
