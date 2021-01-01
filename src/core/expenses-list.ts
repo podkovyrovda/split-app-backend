@@ -1,6 +1,6 @@
 import { Expense } from './expense';
-import { MemberId } from './member';
-import { Money } from './money';
+import { UserId } from './user';
+import { CurrencyEnum, Money } from './money';
 import { Debt } from './dept';
 
 export class ExpensesList {
@@ -10,8 +10,9 @@ export class ExpensesList {
     return this._expenses;
   }
 
-  addExpense(expense: Expense) {
-    this.expenses.push(expense);
+  addExpense(...expenses: Expense[]) {
+    expenses.forEach((expense) => this.expenses.push(expense));
+
     return this;
   }
 
@@ -36,22 +37,22 @@ export class ExpensesList {
     );
   }
 
-  public calculateUserBalance(userId: MemberId, filterByUserId?: MemberId) {
+  public calculateUserBalance(userId: UserId, filterByUserId?: UserId) {
     const { debit, credit } = this._getUserDebitCredit(userId);
 
     const debitSum = debit
       .filter((debt) =>
         filterByUserId ? debt.debtorId === filterByUserId : true,
       )
-      .map((debt) => debt.value)
-      .reduce(Money.sum, Money.ZERO('rub'));
+      .map((debt) => debt.money)
+      .reduce(Money.sum, Money.ZERO(CurrencyEnum.RUB));
 
     const creditSum = credit
       .filter((debt) =>
         filterByUserId ? debt.creditorId === filterByUserId : true,
       )
-      .map((debt) => debt.value)
-      .reduce(Money.sum, Money.ZERO('rub'));
+      .map((debt) => debt.money)
+      .reduce(Money.sum, Money.ZERO(CurrencyEnum.RUB));
 
     return Money.sum(debitSum, creditSum.negate());
   }

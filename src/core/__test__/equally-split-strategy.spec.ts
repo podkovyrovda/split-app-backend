@@ -1,59 +1,72 @@
 import { Group } from '../group';
 import { Expense } from '../expense';
-import { Money } from '../money';
-import { EquallySplitStrategy } from '../split-strategy/equally-split-strategy';
+import { CurrencyEnum, Money } from '../money';
+import { SPLIT_STRATEGIES } from '../split-strategy/split-money.abstract.ts';
+import { ExpensesList } from '../expenses-list';
 
-const group = new Group('Эроланта', 'Аня');
+const anya = 'Аня';
+const ruslan = 'Руслан';
+const diana = 'Диана';
+const sergey = 'Сергей';
+const olya = 'Оля';
+const kostya = 'Костя';
+const andrey = 'Андрей';
+
+const group = new Group('Эроланта', anya, [], new ExpensesList(), '1');
 
 group
-  .addMember('Руслан')
-  .addMember('Диана')
-  .addMember('Сергей')
-  .addMember('Оля')
-  .addMember('Костя')
-  .addMember('Андрей');
+  .addMember(ruslan)
+  .addMember(diana)
+  .addMember(sergey)
+  .addMember(olya)
+  .addMember(kostya)
+  .addMember(andrey);
 
 describe('equally-split-strategy', () => {
   it('should split equally', () => {
     group.expensesList
       .addExpense(
         new Expense(
-          'Диана',
-          Money.of(3300, 'rub'),
+          diana,
+          Money.of(3300, CurrencyEnum.RUB),
           'Залог за хату',
-          ['Аня', 'Руслан', 'Диана', 'Сергей', 'Оля', 'Костя', 'Андрей'],
-          new EquallySplitStrategy(),
+          group.membersIds,
+          SPLIT_STRATEGIES.equally,
+          '1',
         ),
       )
       .addExpense(
         new Expense(
-          'Аня',
-          Money.of(6300, 'rub'),
+          anya,
+          Money.of(6300, CurrencyEnum.RUB),
           'Залог за дом',
-          ['Аня', 'Руслан', 'Диана', 'Сергей', 'Оля', 'Костя', 'Андрей'],
-          new EquallySplitStrategy(),
+          group.membersIds,
+          SPLIT_STRATEGIES.equally,
+          '1',
         ),
       )
       .addExpense(
         new Expense(
-          'Сергей',
-          Money.of(3000, 'rub'),
+          sergey,
+          Money.of(3000, CurrencyEnum.RUB),
           'Залог за хату',
-          ['Аня', 'Руслан', 'Диана', 'Сергей', 'Оля', 'Костя', 'Андрей'],
-          new EquallySplitStrategy(),
+          group.membersIds,
+          SPLIT_STRATEGIES.equally,
+          '1',
         ),
       )
       .addExpense(
         new Expense(
-          'Андрей',
-          Money.of(6300, 'rub'),
+          andrey,
+          Money.of(6300, CurrencyEnum.RUB),
           'Залог за хату',
-          ['Аня', 'Руслан', 'Диана', 'Сергей', 'Оля', 'Костя', 'Андрей'],
-          new EquallySplitStrategy(),
+          group.membersIds,
+          SPLIT_STRATEGIES.equally,
+          '1',
         ),
       );
 
-    const usersBalance = group.members.map((member) => ({
+    const usersBalance = group.membersIds.map((member) => ({
       [member]: group.expensesList
         .calculateUserBalance(member)
         .amount.toNumber(),
@@ -61,8 +74,8 @@ describe('equally-split-strategy', () => {
 
     console.log('Баланс группы', usersBalance);
 
-    group.members.forEach((member) =>
-      group.members.forEach((mem) => {
+    group.membersIds.forEach((member) =>
+      group.membersIds.forEach((mem) => {
         if (member === mem) {
           return;
         }

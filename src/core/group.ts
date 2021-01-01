@@ -1,18 +1,24 @@
-import { MemberId } from './member';
+import { UserId } from './user';
 import { ExpensesList } from './expenses-list';
+
+export type GroupId = string;
 
 export class Group {
   constructor(
     public readonly name: string,
-    public readonly ownerId: MemberId,
-    public readonly members: MemberId[] = [],
+    public readonly ownerId: UserId,
+    public readonly membersIds: UserId[] = [],
     public readonly expensesList: ExpensesList = new ExpensesList(),
+    public readonly id?: GroupId,
   ) {
-    this.addMember(ownerId);
+    if (membersIds.length === 0) {
+      this.membersIds.push(ownerId);
+    }
   }
 
-  addMember(userId: MemberId): Group {
-    this.members.push(userId);
+  addMember(userId: UserId): Group {
+    this.membersIds.push(userId);
+
     return this;
   }
 }

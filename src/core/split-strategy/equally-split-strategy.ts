@@ -1,13 +1,18 @@
-import { MemberId } from '../member';
+import { UserId } from '../user';
 import { Money } from '../money';
 import { Debt } from '../dept';
-import { SplitStrategy } from './split-strategy.abstract.ts';
+import { SplitStrategy, SplitStrategyEnum } from './split-money.abstract.ts';
 
 export class EquallySplitStrategy implements SplitStrategy {
-  split(creditorId: MemberId, money: Money, debtorIds: MemberId[]): Debt[] {
-    return debtorIds.map(
-      (debtorId) =>
-        new Debt(creditorId, debtorId, Money.divide(money, debtorIds.length)),
-    );
+  type: SplitStrategyEnum = SplitStrategyEnum.EQUALLY;
+
+  split(creditorId: UserId, money: Money, debtorsIds: UserId[]): Debt[] {
+    return debtorsIds.map((debtor) => {
+      return new Debt(
+        creditorId,
+        debtor,
+        Money.divide(money, debtorsIds.length),
+      );
+    });
   }
 }

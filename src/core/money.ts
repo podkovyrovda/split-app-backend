@@ -1,6 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 
-export type Currency = 'rub';
+export enum CurrencyEnum {
+  RUB = 'RUB',
+}
 
 BigNumber.config({
   DECIMAL_PLACES: 2,
@@ -9,14 +11,14 @@ BigNumber.config({
 export class Money {
   constructor(
     public readonly amount: BigNumber,
-    public readonly currency: Currency,
+    public readonly currency: CurrencyEnum,
   ) {}
 
-  static ZERO(currency: Currency) {
+  static ZERO(currency: CurrencyEnum) {
     return new Money(new BigNumber(0), currency);
   }
 
-  static of(value: number, currency: Currency) {
+  static of(value: number, currency: CurrencyEnum) {
     return new Money(new BigNumber(value), currency);
   }
 
